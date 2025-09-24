@@ -29,9 +29,7 @@
   if (!id) {
     id = "123"; // id de teste
   }
-
- //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  
+//----------------------------------------------------------------------------------
   const agendamentos = {
     "123": { paciente: "Luana Lucia", data: "11/09/2025", hora: "15:00" },       
     "2": { paciente: "Edmilson", data: "17/09/2025", hora: "13:45" },            
@@ -44,11 +42,8 @@
     "19971503559": { paciente: "Angela", data: "24/09/2025", hora: "14h45"},
     "11945005003": { paciente: "Arley", data: "25/09/2025", hora: "14h00"},
     "19999775246": { paciente: "Rafaela", data: "25/09/2025", hora: "17h30"}
-    };
-
-    //https://asenseodontologia.github.io/avaliacao/avaliacao.html?id= colocar o numero de telefone aqui
-  //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+  };
+//------------------------------------------------------------------------------------
   const agendamento = agendamentos[id];
 
   const card = document.getElementById("agendamentoCard");
@@ -57,6 +52,16 @@
   const horaEl = document.getElementById("hora");
   const btnWhats = document.getElementById("btnWhats");
   const btnAgenda = document.getElementById("btnAgenda");
+
+  // Função para formatar a data/hora no padrão que o Google Agenda entende
+  const formatDateLocal = (d) => {
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, "0");
+    const dia = String(d.getDate()).padStart(2, "0");
+    const hora = String(d.getHours()).padStart(2, "0");
+    const min = String(d.getMinutes()).padStart(2, "0");
+    return `${ano}${mes}${dia}T${hora}${min}00`;
+  };
 
   if (agendamento) {
     card.querySelector("h2").textContent = "Confirmação de Agendamento";
@@ -74,8 +79,8 @@
       const horaSplit = agendamento.hora.split(":");
       const start = new Date(dataSplit[2], dataSplit[1]-1, dataSplit[0], horaSplit[0], horaSplit[1]);
       const end = new Date(start.getTime() + 30*60*1000); 
-      const formatDate = (d) => d.toISOString().replace(/-|:|\.\d\d\d/g,"");
-      const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=Consulta Dentista - ${agendamento.paciente}&dates=${formatDate(start)}/${formatDate(end)}&details=Agendamento confirmado&sf=true&output=xml`;
+
+      const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=Consulta Dentista - ${agendamento.paciente}&dates=${formatDateLocal(start)}/${formatDateLocal(end)}&details=Agendamento confirmado&sf=true&output=xml`;
       window.open(url, "_blank");
     };
   }
@@ -83,6 +88,7 @@
 
 </body>
 </html>
+
 
 
 
